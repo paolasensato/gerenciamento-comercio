@@ -106,6 +106,12 @@ app.get("/marcas/:marcaId", authMiddleware, async (req, res) => { await findById
 app.delete("/marcas/:marcaId", authMiddleware, async (req, res) => { await deleteById(MarcaService, req.params.marcaId, res) })
 app.patch("/marcas/:marcaId", authMiddleware, async (req, res) => { await update(MarcaService, req.params.marcaId, req, res) })
 
+app.post("/produtos", authMiddleware, async (req, res) => { await add(ProdutoService, req, res) })
+app.get("/produtos", authMiddleware, async (req, res) => { await list(ProdutoService, res) })
+app.get("/produtos/:produtoId", authMiddleware, async (req, res) => { await findById(ProdutoService, req.params.produtoId, res) })
+app.delete("/produtos/:produtoId", authMiddleware, async (req, res) => { await deleteById(ProdutoService, req.params.produtoId, res) })
+app.patch("/produtos/:produtoId", authMiddleware, async (req, res) => { await update(ProdutoService, req.params.produtoId, req, res) })
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
