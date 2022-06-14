@@ -6,7 +6,7 @@ class Venda extends Model {
     }
 
     static get idColumn() {
-        return "venda_id"
+        return "vendas_id"
     }
 
 }
