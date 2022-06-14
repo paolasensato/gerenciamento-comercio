@@ -13,6 +13,7 @@ const UsuarioService = require("./service/Usuario");
 const CidadeService = require("./service/Cidade");
 const EnderecoService = require('./service/Endereco');
 const PessoaService = require('./service/Pessoa');
+const MarcaService = require('./service/Marca');
 
 const secretKey = `-----BEGIN RSA PRIVATE KEY-----
 MIICXQIBAAKBgQDCDzF83j+imr1t2fNtfT4Fusm3LJAzFK49xK3bepARl2gcKKNm
@@ -98,6 +99,12 @@ app.get("/enderecos", authMiddleware, async (req, res) => { await list(EnderecoS
 app.get("/enderecos/:usuarioId", authMiddleware, async (req, res) => { await findById(EnderecoService, req.params.usuarioId, res) })
 app.delete("/enderecos/:usuarioId", authMiddleware, async (req, res) => { await deleteById(EnderecoService, req.params.usuarioId, res) })
 app.patch("/enderecos/:usuarioId", authMiddleware, async (req, res) => { await update(EnderecoService, req.params.usuarioId, req, res) })
+
+app.post("/marcas", authMiddleware, async (req, res) => { await add(MarcaService, req, res) })
+app.get("/marcas", authMiddleware, async (req, res) => { await list(MarcaService, res) })
+app.get("/marcas/:marcaId", authMiddleware, async (req, res) => { await findById(MarcaService, req.params.marcaId, res) })
+app.delete("/marcas/:marcaId", authMiddleware, async (req, res) => { await deleteById(MarcaService, req.params.marcaId, res) })
+app.patch("/marcas/:marcaId", authMiddleware, async (req, res) => { await update(MarcaService, req.params.marcaId, req, res) })
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
