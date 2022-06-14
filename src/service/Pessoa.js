@@ -1,8 +1,8 @@
 const Pessoa = require("../models/Pessoa");
 
 class PessoaService {
-  async add(user) {
-    return await Pessoa.query().insertAndFetch(user);
+  async add(person) {
+    return await Pessoa.query().insertAndFetch(person);
   }
 
   async list() {
@@ -13,10 +13,10 @@ class PessoaService {
     return await Pessoa.query().findById(id);
   }
 
-  async update(id, user) {
-    console.log(id, user)
+  async update(id, person) {
+    console.log(id, person)
 
-    return await Pessoa.query().patchAndFetchById(id, user);
+    return await Pessoa.query().patchAndFetchById(id, person);
   }
 
   async deleteById(id) {
