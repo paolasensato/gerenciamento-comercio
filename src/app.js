@@ -80,13 +80,13 @@ app.post("/usuarios", authMiddleware, async (req, res) => { await add(UsuarioSer
 app.get("/usuarios", authMiddleware, async (req, res) => { await list(UsuarioService, res) })
 app.get("/usuarios/:usuarioId", authMiddleware, async (req, res) => { await findById(UsuarioService, req.params.usuarioId, res) })
 app.delete("/usuarios/:usuarioId", authMiddleware, async (req, res) => { await deleteById(UsuarioService, req.params.usuarioId, res) })
-app.patch("/usuarios/:usuarioId", authMiddleware, async (req, res) => { await update(UsuarioService, req.params.usuarioId, res) })
+app.patch("/usuarios/:usuarioId", authMiddleware, async (req, res) => { await update(UsuarioService, req.params.usuarioId, req, res) })
 
 app.post("/pessoas", authMiddleware, async (req, res) => { await add(PessoaService, req, res) })
 app.get("/pessoas", authMiddleware, async (req, res) => { await list(PessoaService, res) })
 app.get("/pessoas/:pessoaId", authMiddleware, async (req, res) => { await findById(PessoaService, req.params.pessoaId, res) })
 app.delete("/pessoas/:pessoaId", authMiddleware, async (req, res) => { await deleteById(PessoaService, req.params.pessoaId, res) })
-app.patch("/pessoas/:pessoaId", authMiddleware, async (req, res) => { await update(PessoaService, req.params.pessoaId, res) })
+app.patch("/pessoas/:pessoaId", authMiddleware, async (req, res) => { await update(PessoaService, req.params.pessoaId, req, res) })
 
 app.post("/cidades", authMiddleware, async (req, res) => { await add(CidadeService, req, res) })
 app.get("/cidades", authMiddleware, async (req, res) => { await list(CidadeService, res) })
