@@ -1,8 +1,8 @@
 const Cidade = require("../models/Cidade");
 
 class CidadeService {
-  async add(user) {
-    return await Cidade.query().insertAndFetch(user);
+  async add(city) {
+    return await Cidade.query().insertAndFetch(city);
   }
 
   async list() {
@@ -13,10 +13,10 @@ class CidadeService {
     return await Cidade.query().findById(id);
   }
 
-  async update(id, user) {
-    console.log(id, user)
+  async update(id, city) {
+    console.log(id, city)
 
-    return await Cidade.query().patchAndFetchById(id, user);
+    return await Cidade.query().patchAndFetchById(id, city);
   }
 
   async deleteById(id) {
