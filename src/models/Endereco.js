@@ -1,4 +1,4 @@
-import { Model } from "objection";
+const { Model } = require("objection");
 
 class Endereco extends Model {
   static get tableName() {
@@ -11,4 +11,4 @@ class Endereco extends Model {
 
 }
 
-export default Endereco;
+module.exports = Endereco;
