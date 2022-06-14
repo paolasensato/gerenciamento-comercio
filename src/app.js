@@ -1,7 +1,6 @@
 
 const express = require('express')
 const bodyParser = require('body-parser')
-const dotenv = require("dotenv")
 require("./knex/connect");
 
 const { list, add, findById, deleteById, update } = require('./helper/crud');
@@ -10,14 +9,31 @@ const jwt = require('jsonwebtoken')
 const app = express()
 const port = 3000
 
-dotenv.config()
-
 const UsuarioService = require("./service/Usuario");
 const CidadeService = require("./service/Cidade");
 const EnderecoService = require('./service/Endereco');
 
-const secretKey = String(process.env.PRIVATE)
-const publicKey = String(process.env.PUBLIC)
+const secretKey = `-----BEGIN RSA PRIVATE KEY-----
+MIICXQIBAAKBgQDCDzF83j+imr1t2fNtfT4Fusm3LJAzFK49xK3bepARl2gcKKNm
+YJI6svZ8mznkoDp1uCuwyBKVIkRfrGAd1FuuVrzMi0kairWGz71FHbcubKy/6AOG
+caONmk0K1DjS4dIzJLmIeUpv2jrtIctGDt2tXg4OQi1aM59yS4efZlbNxQIDAQAB
+AoGARlZPb5z2n69KfaiDzOmaM2Vye4wRcBJM3WKOSYDw+w9P0vT/1LmoBtKa+Ksi
+nrVcuxJX86lw4tEayzqlU+qGl9Z5uOI+vMjh6e4hpEQN2KVrVnpEUrzVX8yZN22A
+KWWZsWucU7djb8wLpezYNYd5bItUuOXFRnmrjuPQhqLXbPkCQQDmiR+zwmcOTir0
+9auT88fTeLpr7XT+YyrBOHjgwUTd8HO3C2FuL/dDv3pP9LrsUgynMTMef3nF2qh0
+40bep4qPAkEA136gUbisosNHa7GRKCSPUobmEBc4pRr2CtaUbAvGFJMbV+RCzu7a
+n0hHbPZwlWBTN/WIfrj5dvNRa+lbk3PcawJAem2P/HLdL+erQHPHLsdj85ZFylNM
+slwPtJU8/H8nB4ZOrYLJty6Z7cyeNCAPtLjOJ2wlbajdDonUtF6OoGfxWQJBALGp
+TOVzGqkp1CUehO0SjzLb0qrraiD8xGKVHFKjtk/aJE3m+4l9dLKjNXfJCXKtso5N
+GJZZTBpcagFMp9o+SDcCQQCKwJ9tVu/4X5SFgbVSr06u1tPkCccYFAiqbpEH4fPx
+zt18ubZgiViKiYKT6gHZPKI8bhkmvG/Fg/zJ9FBYjl+9
+-----END RSA PRIVATE KEY-----`
+const publicKey = `-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDCDzF83j+imr1t2fNtfT4Fusm3
+LJAzFK49xK3bepARl2gcKKNmYJI6svZ8mznkoDp1uCuwyBKVIkRfrGAd1FuuVrzM
+i0kairWGz71FHbcubKy/6AOGcaONmk0K1DjS4dIzJLmIeUpv2jrtIctGDt2tXg4O
+Qi1aM59yS4efZlbNxQIDAQAB
+-----END PUBLIC KEY-----`
 const secretOption = { passphrase: '', key: secretKey, }
 
 app.use(bodyParser.urlencoded({ extended: true }))
