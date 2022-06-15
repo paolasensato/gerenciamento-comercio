@@ -14,6 +14,13 @@ const CidadeService = require("./service/Cidade");
 const EnderecoService = require('./service/Endereco');
 const PessoaService = require('./service/Pessoa');
 const MarcaService = require('./service/Marca');
+const ClienteService = require('./service/Cliente');
+const PessoaFisicaService = require('./service/PessoaFisica');
+const PessoaJuridicaService = require('./service/PessoaJuridica');
+const ProdutoService = require('./service/Produto');
+const VendaService = require('./service/Venda');
+const ItemVendaService = require('./service/ItensVenda');
+const Produto = require('./models/Produto');
 
 const secretKey = `-----BEGIN RSA PRIVATE KEY-----
 MIICXQIBAAKBgQDCDzF83j+imr1t2fNtfT4Fusm3LJAzFK49xK3bepARl2gcKKNm
@@ -51,7 +58,7 @@ app.post("/login", async (req, res) => {
 
   if (usuario.senha !== senha) return res.status(401).json({ message: "Senha incorreta" })
 
-  const decodedToken = jwt.sign({ email, senha, tipoUsuario }, secretOption, { algorithm: 'RS256', expiresIn: "7d", })
+  const decodedToken = jwt.sign({ usuario_id: usuario.usuario_id, email, senha, tipoUsuario }, secretOption, { algorithm: 'RS256', expiresIn: "7d", })
 
   res.send({ token: decodedToken, email, tipo_usuario: tipoUsuario })
 })
@@ -94,11 +101,86 @@ app.get("/cidades/:cidadeId", authMiddleware, async (req, res) => { await findBy
 app.delete("/cidades/:cidadeId", authMiddleware, async (req, res) => { await deleteById(CidadeService, req.params.cidadeId, res) })
 app.patch("/cidades/:cidadeId", authMiddleware, async (req, res) => { await update(CidadeService, req.params.cidadeId, req, res) })
 
+app.post("/clientes", authMiddleware, async (req, res) => {
+  const {
+    pessoa_juridica: pessoaJuridica,
+    pessoa_fisica: pessoaFisica,
+    tipo_cliente: tipoCliente,
+    pessoa_id: pessoaId,
+    ativo } = req.body;
+
+  const cliente = await new ClienteService().add({
+    tipo_cliente: tipoCliente,
+    pessoa_id: pessoaId,
+    ativo
+  })
+
+  if (tipoCliente == "FISICA") {
+    await new PessoaFisicaService().add({
+      cliente_id: cliente.cliente_id,
+      cpf: pessoaFisica.cpf,
+      rg: pessoaFisica.rg
+    })
+  } else {
+    await new PessoaJuridicaService().add({
+      cliente_id: cliente.cliente_id,
+      cnpj: pessoaJuridica.cnpj,
+      inscricao_estadual: pessoaJuridica.inscricao_estadual
+    })
+  }
+
+  res.send(cliente);
+
+})
+app.get("/clientes", authMiddleware, async (req, res) => { await list(ClienteService, res) })
+app.get("/clientes/:clienteId", authMiddleware, async (req, res) => { await findById(ClienteService, req.params.clienteId, res) })
+app.delete("/clientes/:clienteId", authMiddleware, async (req, res) => { await deleteById(ClienteService, req.params.clienteId, res) })
+app.patch("/clientes/:clienteId", authMiddleware, async (req, res) => { await update(ClienteService, req.params.clienteId, req, res) })
+
+app.post("/vendas", authMiddleware, async (req, res) => {
+  const {
+    produtos,
+    cliente_id: clienteId,
+  } = req.body;
+
+  const produtosVenda = await Produto.query().whereIn("produto_id", produtos)
+
+  let total = 0;
+  produtosVenda.forEach(produto => {
+    total = total + produto.valor;
+  })
+
+  const venda = await new VendaService().add({
+    usuario_id: req.user.usuario_id,
+    cliente_id: clienteId,
+    data_venda: new Date(),
+    valor_total: total
+  })
+
+  const produtosPromises = produtos.map(produto => {
+    return new ItemVendaService().add({
+      venda_id: venda.vendas_id,
+      produto_id: produto
+    })
+  })
+
+  await Promise.all(produtosPromises)
+
+  res.send({
+    ...venda,
+    data_venda: new Date(venda.data_venda)
+  });
+})
+app.get("/vendas", authMiddleware, async (req, res) => { await list(EnderecoService, res) })
+app.get("/vendas/:vendaId", authMiddleware, async (req, res) => { await findById(EnderecoService, req.params.vendaId, res) })
+app.delete("/vendas/:vendaId", authMiddleware, async (req, res) => { await deleteById(EnderecoService, req.params.vendaId, res) })
+app.patch("/vendas/:vendaId", authMiddleware, async (req, res) => { await update(EnderecoService, req.params.vendaId, req, res) })
+
 app.post("/enderecos", authMiddleware, async (req, res) => { await add(EnderecoService, req, res) })
 app.get("/enderecos", authMiddleware, async (req, res) => { await list(EnderecoService, res) })
-app.get("/enderecos/:usuarioId", authMiddleware, async (req, res) => { await findById(EnderecoService, req.params.usuarioId, res) })
-app.delete("/enderecos/:usuarioId", authMiddleware, async (req, res) => { await deleteById(EnderecoService, req.params.usuarioId, res) })
-app.patch("/enderecos/:usuarioId", authMiddleware, async (req, res) => { await update(EnderecoService, req.params.usuarioId, req, res) })
+app.get("/enderecos/:enderecoId", authMiddleware, async (req, res) => { await findById(EnderecoService, req.params.enderecoId, res) })
+app.delete("/enderecos/:enderecoId", authMiddleware, async (req, res) => { await deleteById(EnderecoService, req.params.enderecoId, res) })
+app.patch("/enderecos/:enderecoId", authMiddleware, async (req, res) => { await update(EnderecoService, req.params.enderecoId, req, res) })
 
 app.post("/marcas", authMiddleware, async (req, res) => { await add(MarcaService, req, res) })
 app.get("/marcas", authMiddleware, async (req, res) => { await list(MarcaService, res) })
