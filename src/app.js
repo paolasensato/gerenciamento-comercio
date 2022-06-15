@@ -171,10 +171,10 @@ app.post("/vendas", authMiddleware, async (req, res) => {
     data_venda: new Date(venda.data_venda)
   });
 })
-app.get("/vendas", authMiddleware, async (req, res) => { await list(EnderecoService, res) })
-app.get("/vendas/:vendaId", authMiddleware, async (req, res) => { await findById(EnderecoService, req.params.vendaId, res) })
-app.delete("/vendas/:vendaId", authMiddleware, async (req, res) => { await deleteById(EnderecoService, req.params.vendaId, res) })
-app.patch("/vendas/:vendaId", authMiddleware, async (req, res) => { await update(EnderecoService, req.params.vendaId, req, res) })
+app.get("/vendas", authMiddleware, async (req, res) => { await list(VendaService, res) })
+app.get("/vendas/:vendaId", authMiddleware, async (req, res) => { await findById(VendaService, req.params.vendaId, res) })
+app.delete("/vendas/:vendaId", authMiddleware, async (req, res) => { await deleteById(VendaService, req.params.vendaId, res) })
+app.patch("/vendas/:vendaId", authMiddleware, async (req, res) => { await update(VendaService, req.params.vendaId, req, res) })
 
 app.post("/enderecos", authMiddleware, async (req, res) => { await add(EnderecoService, req, res) })
 app.get("/enderecos", authMiddleware, async (req, res) => { await list(EnderecoService, res) })
