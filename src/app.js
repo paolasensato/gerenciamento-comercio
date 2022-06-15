@@ -52,7 +52,7 @@ app.post("/login", async (req, res) => {
   const { email, senha, tipo_usuario: tipoUsuario } = req.body
 
 
-  const usuario = await new UsuarioService().findByEmail(email)
+  const usuario = await new UsuarioService().findByEmail(email) 	
 
   console.log(usuario)
 
@@ -168,7 +168,7 @@ app.post("/vendas", authMiddleware, async (req, res) => {
 
   res.send({
     ...venda,
-    data_venda: new Date(venda.data_venda)
+    data_venda: new Date(venda.data_venda)  	      	  	  	  
   });
 })
 app.get("/vendas", authMiddleware, async (req, res) => { await list(VendaService, res) })
